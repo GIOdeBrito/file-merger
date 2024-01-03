@@ -19,14 +19,12 @@ namespace FileMerger
 		{
 			string[] _str = str.Split(new[] { ' ', '\t', '\n', '\r' },
 			StringSplitOptions.RemoveEmptyEntries);
-
 			return _str;
 		}
 
 		public static string[] GetStringByLine (string str)
 		{
 			string[] _str = str.Split(new[] { '\n', }, StringSplitOptions.RemoveEmptyEntries);
-
 			return _str;
 		}
 
@@ -35,11 +33,10 @@ namespace FileMerger
 			Random random = new Random();
 
 			int length = 12;
+			string hexString = string.Empty;
 
-			string hexString = string.Concat(
-				Enumerable.Range(0, length)
-				.Select(_ => random.Next(16).ToString("X"))
-			);
+			hexString = string.Concat(Enumerable.Range(0, length).Select(item =>
+				random.Next(16).ToString("X")));
 
 			return hexString;
 		}

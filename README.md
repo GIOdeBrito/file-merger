@@ -33,7 +33,7 @@ After building the application, two folders will appear inside the directory
 one bin/ and the other, obj/.
 
 Inside <b>bin/Release/net7.0/</b> will be a file named <b>FileMerger.dll</b>.
-Move to to directory and run the and run the built program.
+Move to its directory and run the built program.
 
 ```bash
   dotnet FileMerger.dll

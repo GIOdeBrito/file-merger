@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace FileMerger
 {
@@ -15,12 +14,30 @@ namespace FileMerger
 		{
 			Console.WriteLine("===============================================================");
 			Console.WriteLine("\tGIO's File Merger");
-			Console.WriteLine("\tv 1.0");
+			Console.WriteLine("\tv 1.0.2");
 			Console.WriteLine("===============================================================");
-			Console.WriteLine("");
+			Console.WriteLine();
 
+			// Lê o XML apenas uma única vez
 			XML.ReadXMLConfigs();
-			SelectFiles();
+
+			while(true)
+			{
+				SelectFiles();
+
+				Console.Write("\nDo you wish to merge again?");
+				Console.WriteLine(" (y / n)");
+
+				string confirm = Console.ReadLine();
+
+				if(confirm is "Y" || confirm is "y")
+				{
+					Console.WriteLine();
+					continue;
+				}
+
+				break;
+			}
 		}
 
 		public static void SelectFiles ()
@@ -30,13 +47,14 @@ namespace FileMerger
 			using(StreamReader reader = new StreamReader(@"./include.txt"))
 			{
 				string line = string.Empty;
+
 				while((line = reader.ReadLine()) != null)
 				{
 					files.Add(line);
 				}
 			}
 
-			Console.WriteLine("[100%] Files selected");
+			Console.WriteLine($"[100%] Files selected: {files.Count}");
 
 			UnifyFiles(files.ToArray());
 		}
@@ -47,19 +65,21 @@ namespace FileMerger
 
 			foreach(string file in files)
 			{
-				if(File.Exists(file))
+				if(!File.Exists(file))
 				{
-					string content = string.Empty;
-					content += $"// --------------------------------\n";
-					content += $"//\tARQUIVO: {file}";
-					content += $"\n// --------------------------------\n\n";
-					content += File.ReadAllText(file);
-
-					finalstr += $"{content}\n\n";
+					continue;
 				}
+
+				string content = string.Empty;
+				content += $"// --------------------------------\n";
+				content += $"//\tARQUIVO: {file}";
+				content += $"\n// --------------------------------\n\n";
+				content += File.ReadAllText(file);
+
+				finalstr += $"{content}\n\n";
 			}
 
-			Console.WriteLine("[100%] Files merged in memory");
+			Console.WriteLine("[100%] File's content merged in memory");
 
 			if(XML.configs.nocomments)
 			{
@@ -71,13 +91,13 @@ namespace FileMerger
 			{
 				Console.WriteLine("[100%] Removed line breaks");
 				finalstr = string.Join(" ", finalstr.Split(new[] { '\r', '\n' },
-					StringSplitOptions.RemoveEmptyEntries));
+				StringSplitOptions.RemoveEmptyEntries));
 			}
 
-			// Experimental, portanto não utilizado
+			// Experimental, portanto ainda não utilizado
 			if(XML.configs.obfuscate)
 			{
-				Console.WriteLine("[100%] Código obfuscado");
+				Console.WriteLine("[100%] Code obsfuscated");
 				finalstr = MakeStringArr(finalstr);
 			}
 
@@ -87,7 +107,6 @@ namespace FileMerger
 			File.WriteAllText($"{dir}/{name}.js", finalstr);
 
 			Console.WriteLine("[100%] Final file written on disk");
-			Console.ReadKey();
 		}
 
 		public static string MakeStringArr (string str)
@@ -95,14 +114,7 @@ namespace FileMerger
 			string[] _nova_str = str.Split(new[] { ' ', '\t', '\n', '\r' },
 			StringSplitOptions.RemoveEmptyEntries);
 
-			/*foreach(string _str in _nova_str)
-			{
-				Console.WriteLine(_str);
-			}*/
-
-			string neo_unified = UniteString(_nova_str);
-
-			return neo_unified;
+			return UniteString(_nova_str);
 		}
 
 		public static string UniteString (string[] arr)

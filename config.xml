@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<G_Merger xmlns:GIO="FileMerger">
+	<Config>
+		<!-- Folder and output name -->
+		<dir>./out</dir>
+		<name>samka6</name>
+		<nocomments>false</nocomments>
+		<nolinebreak>false</nolinebreak>
+		<!-- This is still experimental and not fully tested -->
+		<obfuscate>false</obfuscate>
+	</Config>
+</G_Merger>

@@ -10,7 +10,7 @@ namespace FileMerger
 {
 	internal class XML
 	{
-		public static Config configs = null;
+		public static Config? configs = null;
 
 		public static void ReadXMLConfigs ()
 		{
@@ -21,16 +21,22 @@ namespace FileMerger
 				using(StreamReader reader = new StreamReader(@"./config.xml"))
 				{
 					var _xmldata = (G_Merger) xml.Deserialize(reader);
+
+					if(_xmldata.conf is null)
+					{
+						Console.WriteLine("'<Config>' tag in configuration file is null");
+					}
+
 					configs = _xmldata.conf;
 				}
 			}
 			catch(IOException ex)
 			{
-				Console.WriteLine($"Erro ao ler arquivo. \n{ex.Message}");
+				Console.WriteLine($"Exception when reading file. \n{ex.Message}");
 			}
 			catch(InvalidOperationException ex)
 			{
-				Console.WriteLine($"Erro ao deserializar arquivo. \n{ex.Message}");
+				Console.WriteLine($"Exception when deserializing file. \n{ex.Message}");
 			}
 		}
 	}
@@ -40,7 +46,7 @@ namespace FileMerger
 public class G_Merger
 {
 	[XmlElement("Config")]
-	public Config conf;
+	public Config conf { get; set; }
 }
 
 public class Config
