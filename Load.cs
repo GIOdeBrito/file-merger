@@ -14,7 +14,7 @@ namespace FileMerger
 		{
 			Console.WriteLine("===============================================================");
 			Console.WriteLine("\tGIO's File Merger");
-			Console.WriteLine("\tv 1.0.2");
+			Console.WriteLine("\tv 1.0.3");
 			Console.WriteLine("===============================================================");
 			Console.WriteLine();
 
