@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FileMerger
 {
 	internal class Load
 	{
+		public static void Main (string[] args)
+		{
+			Arguments.HandleArguments(args);
+			GreetingMessage();
+		}
+
 		public static void GreetingMessage ()
 		{
 			Console.WriteLine("===============================================================");
 			Console.WriteLine("\tGIO's File Merger");
-			Console.WriteLine("\tv 1.0.3");
 			Console.WriteLine("===============================================================");
 			Console.WriteLine();
 
 			// Lê o XML apenas uma única vez
 			XML.ReadXMLConfigs();
 
-			while(true)
+			do
 			{
 				SelectFiles();
 
@@ -37,7 +41,7 @@ namespace FileMerger
 				}
 
 				break;
-			}
+			} while (Arguments.toLoop());
 		}
 
 		public static void SelectFiles ()
@@ -54,7 +58,10 @@ namespace FileMerger
 				}
 			}
 
-			Console.WriteLine($"[100%] Files selected: {files.Count}");
+			if(Arguments.isVerbose())
+			{
+				Console.WriteLine($"[100%] Files selected: {files.Count}");
+			}
 
 			UnifyFiles(files.ToArray());
 		}
@@ -79,7 +86,10 @@ namespace FileMerger
 				finalstr += $"{content}\n\n";
 			}
 
-			Console.WriteLine("[100%] File's content merged in memory");
+			if(Arguments.isVerbose())
+			{
+				Console.WriteLine("[100%] File's content merged in memory");
+			}
 
 			if(XML.configs.nocomments)
 			{
@@ -101,10 +111,25 @@ namespace FileMerger
 				finalstr = MakeStringArr(finalstr);
 			}
 
+			SaveToDisk(finalstr);
+		}
+
+		public static void SaveToDisk (string finalstr)
+		{
 			string dir = XML.configs.dir;
 			string name = XML.configs.name;
+			string ext = Arguments.Extension() ?? XML.configs.ext;
 
-			File.WriteAllText($"{dir}/{name}.js", finalstr);
+			string fullfile = $"{dir}/{name}.{ext}";
+			File.WriteAllText(fullfile, finalstr);
+
+			Console.WriteLine($"FILE: {fullfile}");
+
+			if(!Arguments.isVerbose())
+			{
+				Console.WriteLine("\nDone");
+				return;
+			}
 
 			Console.WriteLine("[100%] Final file written on disk");
 		}

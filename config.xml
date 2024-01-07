@@ -4,6 +4,8 @@
 		<!-- Folder and output name -->
 		<dir>./out</dir>
 		<name>samka6</name>
+		<!-- File extension -->
+		<ext>js</ext>
 		<nocomments>false</nocomments>
 		<nolinebreak>false</nolinebreak>
 		<!-- This is still experimental and not fully tested -->

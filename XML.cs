@@ -18,13 +18,14 @@ namespace FileMerger
 			{
 				XmlSerializer xml = new XmlSerializer(typeof(G_Merger));
 
-				using(StreamReader reader = new StreamReader(@"./config.xml"))
+				string path = Arguments.XMLPath();
+				using(StreamReader reader = new StreamReader(path))
 				{
 					var _xmldata = (G_Merger) xml.Deserialize(reader);
 
 					if(_xmldata.conf is null)
 					{
-						Console.WriteLine("'<Config>' tag in configuration file is null");
+						Console.WriteLine("'<Config>' in configuration file is null");
 					}
 
 					configs = _xmldata.conf;
@@ -51,9 +52,10 @@ public class G_Merger
 
 public class Config
 {
-	public string dir {get; set; }
-	public string name {get; set; }
-	public bool nocomments {get; set; }
-	public bool nolinebreak {get; set; }
-	public bool obfuscate {get; set; }
+	public string dir { get; set; }
+	public string name { get; set; }
+	public string ext { get; set; }
+	public bool nocomments { get; set; }
+	public bool nolinebreak { get; set; }
+	public bool obfuscate { get; set; }
 }
